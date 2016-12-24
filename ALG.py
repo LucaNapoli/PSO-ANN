@@ -6,7 +6,7 @@ tf.reset_default_graph()
 # config
 batch_size = 100
 learning_rate = 0.5
-training_epochs = 5
+training_epochs = 20
 logs_path = "/Users/Luca/Documents/PSO-ANN"
 
 # load mnist data set
@@ -48,19 +48,19 @@ with tf.name_scope('Accuracy'):
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     
 # create a summary for our cost and accuracy
-tf.scalar_summary("cost", cross_entropy)
-tf.scalar_summary("accuracy", accuracy)
+tf.summary.scalar("cost", cross_entropy)
+tf.summary.scalar("accuracy", accuracy)
 
 # merge all summaries into a single "operation" which we can execute in a session 
-summary_op = tf.merge_all_summaries()
+summary_op = tf.summary.merge_all()
 
 
 with tf.Session() as sess:
     # variables need to be initialized before we can use them
-    sess.run(tf.initialize_all_variables())
+    sess.run(tf.global_variables_initializer())
 
     # create log writer object
-    writer = tf.train.SummaryWriter(logs_path, graph=tf.get_default_graph())
+    writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
         
     # perform training cycles
     for epoch in range(training_epochs):
