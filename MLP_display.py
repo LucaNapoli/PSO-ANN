@@ -16,7 +16,7 @@ import tensorflow as tf
 
 # Parameters
 learning_rate = 0.001
-training_epochs = 15
+training_epochs = 1
 batch_size = 100
 display_step = 1
 logs_path = "/Users/Luca/Documents/PSO-ANN"
@@ -76,16 +76,17 @@ with tf.Session() as sess:
     # Training cycle
     for epoch in range(training_epochs):
         avg_cost = 0.
+        #Total number of batches
         total_batch = int(mnist.train.num_examples/batch_size)
         # Loop over all batches
         for i in range(total_batch):
             batch_x, batch_y = mnist.train.next_batch(batch_size)
             # Run optimization op (backprop) and cost op (to get loss value)
-            _, c = sess.run([optimizer, cost], feed_dict={x: batch_x,       
+            #TODO try to change optimizer
+            _, c = sess.run([optimizer], feed_dict={x: batch_x,       
                                                           y: batch_y})
-            with tf.name_scope("pesi"):
-                pesi = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'h1')
-
+            #_, c = sess.run([optimizer, cost], feed_dict={x: batch_x,       
+            #                                             y: batch_y})
             # Compute average loss
             avg_cost += c / total_batch
         # Display logs per epoch step
@@ -96,6 +97,25 @@ with tf.Session() as sess:
 
     # Test model
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+    #correct_prediction = tf.cast(correct_prediction, 'float')
+    #print(correct_prediction)
     # Calculate accuracy
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print("Accuracy:", accuracy.eval({x: mnist.test.images, y: mnist.test.labels}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
